@@ -17,21 +17,15 @@ class ViewController: UIViewController{
     var persistentContainer: NSPersistentContainer?
     var managedObject: TimeMO?
     var another: TimeMO?
-    init(container: NSPersistentContainer?) {
-        super.init(nibName: nil, bundle: nil)
-        persistentContainer = container
-        managedObject = NSEntityDescription.insertNewObject(forEntityName: "Time", into: (persistentContainer?.viewContext)!) as? TimeMO
-        another = NSEntityDescription.insertNewObject(forEntityName: "Time", into: (persistentContainer?.viewContext)!) as? TimeMO
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var context: NSManagedObjectContext?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        //直接調用persistentContainer
+        context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        managedObject = TimeMO(context: context!)
+        another = TimeMO(context: context!)
         button = UIButton.init(frame: CGRect.init(x: 100, y: 600, width: 100, height: 100))
         button?.setTitle("Start", for: .normal)
         button?.setTitleColor(.red, for: .normal)
